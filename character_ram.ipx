@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DiamondModule name="character_ram" module="character_ram" VendorName="Lattice Semiconductor Corporation" generator="IPexpress" date="2024 08 14 11:09:36.166" version="6.5" type="Module" synthesis="lse" source_format="Verilog HDL">
+  <Package>
+		<File name="" type="" modified="2024 08 14 11:09:36.023"/>
+		<File name="character_ram.lpc" type="lpc" modified="2024 08 14 11:09:34.593"/>
+		<File name="character_ram.v" type="top_level_verilog" modified="2024 08 14 11:09:34.659"/>
+		<File name="character_ram_tmpl.v" type="template_verilog" modified="2024 08 14 11:09:34.660"/>
+		<File name="d:/fpga_work/md320-256-70e/character_ram.mem" type="mem" modified="2024 08 14 07:46:11.505"/>
+		<File name="tb_character_ram_tmpl.v" type="testbench_verilog" modified="2024 08 14 11:09:34.662"/>
+  </Package>
+</DiamondModule>

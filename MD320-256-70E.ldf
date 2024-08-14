@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BaliProject version="3.2" title="MD320-256-70E" device="LCMXO2-7000HE-4TG144C" default_implementation="elDriver">
+    <Options/>
+    <Implementation title="elDriver" dir="elDriver" description="elDriver" synthesis="lse" default_strategy="Timing">
+        <Options def_top="elDriver"/>
+        <Source name="elDriver.v" type="Verilog" type_short="Verilog">
+            <Options top_module="elDriver"/>
+        </Source>
+        <Source name="font_rom.ipx" type="IPX_Module" type_short="IPX">
+            <Options/>
+        </Source>
+        <Source name="character_ram.ipx" type="IPX_Module" type_short="IPX">
+            <Options/>
+        </Source>
+        <Source name="sync.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="character_ram.mem" type="Unknown Type" type_short="Unknown">
+            <Options/>
+        </Source>
+        <Source name="elDriver.rva" type="Reveal Analyzer Project File" type_short="RVA">
+            <Options/>
+        </Source>
+        <Source name="elDriver.rvl" type="Reveal" type_short="Reveal" excluded="TRUE">
+            <Options/>
+        </Source>
+        <Source name="elDriver/elDriver.xcf" type="Programming Project File" type_short="Programming">
+            <Options/>
+        </Source>
+        <Source name="font_rom.mem" type="Unknown Type" type_short="Unknown">
+            <Options/>
+        </Source>
+        <Source name="MD320.256-70E.lpf" type="Logic Preference" type_short="LPF">
+            <Options/>
+        </Source>
+    </Implementation>
+</BaliProject>

@@ -1,0 +1,29 @@
+SCUBA, Version Diamond (64-bit) 3.12.1.454
+Wed Aug 14 11:09:34 2024
+
+Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
+Copyright (c) 1995 AT&T Corp.   All rights reserved.
+Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
+Copyright (c) 2001 Agere Systems   All rights reserved.
+Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
+
+    Issued command   : D:\fpgaTools\latticeDiamond\diamond\3.12\ispfpga\bin\nt64\scuba.exe -w -n character_ram -lang verilog -synth lse -bus_exp 7 -bb -arch xo2c00 -type ramdps -device LCMXO2-7000HE -raddr_width 11 -rwidth 8 -waddr_width 11 -wwidth 8 -rnum_words 2048 -wnum_words 2048 -cascade -1 -memfile d:/fpga_work/md320-256-70e/character_ram.mem -memformat hex 
+    Circuit name     : character_ram
+    Module type      : RAM_DP
+    Module Version   : 6.5
+    Ports            : 
+	Inputs       : WrAddress[10:0], RdAddress[10:0], Data[7:0], WE, RdClock, RdClockEn, Reset, WrClock, WrClockEn
+	Outputs      : Q[7:0]
+    I/O buffer       : not inserted
+    Memory file      : d:/fpga_work/md320-256-70e/character_ram.mem
+    EDIF output      : character_ram.edn
+    Verilog output   : character_ram.v
+    Verilog template : character_ram_tmpl.v
+    Verilog testbench: tb_character_ram_tmpl.v
+    Verilog purpose  : for synthesis and simulation
+    Bus notation     : big endian
+    Report output    : character_ram.srp
+    Element Usage    :
+          DP8KC : 2
+    Estimated Resource Usage:
+            EBR : 2
