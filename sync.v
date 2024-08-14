@@ -65,6 +65,6 @@ assign out_display_vs = (display_y_cnt < VS_ACTIVE);
 
 
 // display coordinates
-assign out_coord_x = display_x_cnt;
-assign out_coord_y = display_y_cnt;
+assign out_coord_x = (display_x_cnt < HS_ACTIVE) ? display_x_cnt : 9'd0;
+assign out_coord_y = (display_y_cnt < VS_ACTIVE) ? display_y_cnt : 9'd0;
 endmodule
