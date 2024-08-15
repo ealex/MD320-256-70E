@@ -8,7 +8,9 @@ module elDriver(
 	output wire out_display_hs,
 	output wire out_display_vs,
 	
-	// external RAM signals
+	// communication interface
+	// UART
+	input wire UART_RX,
 	
 	// debug signals
 	output wire debug_clock,
@@ -92,6 +94,22 @@ font_rom font_rom_inst (
 	.Q(font_rom_data)
 );
 assign out_display_data = font_rom_data[coord_x[2:0]];
+
+
+// TODO : implement SPI interface - faster and better
+// this is the interface towards the user
+// it implements an 8N1 uart with baud 230400 - easy to test and the minimum baud rate
+// with the current uart implementation (8 bit divider)
+localparam UART_CLK_DIV = 8'd231; // (Frequency of i_Clock)/(Frequency of UART)
+// serial port RX
+wire uartRxNewByte;
+wire[7:0] uartRxData;
+uart_rx #(.CLKS_PER_BIT(UART_CLK_DIV)) UART_RX_INST (
+	.i_Clock(main_clock),
+	.i_Rx_Serial(UART_RX),
+	.o_Rx_DV(uartNewByte),
+	.o_Rx_Byte()
+);
 
 // debug signals
 assign debug_out_display_clock = out_display_clock;
