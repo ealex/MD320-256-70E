@@ -29,8 +29,8 @@ There are several functional blocks used by the design:
    It provides the X(`out_coord_x`) and Y(`out_coord_y`) coordinates for the video ram / character generator.
    It uses 2 of the states of the timing generator
    - `3'b000`
-    - `out_display_clock` is set to `1'b0`
-    - `display_x_cnt` and `display_y_cnt` are incremented and reset when they reach `HS_PERIOD` and `VS_PERIOD`
+      - `out_display_clock` is set to `1'b0`
+      - `display_x_cnt` and `display_y_cnt` are incremented and reset when they reach `HS_PERIOD` and `VS_PERIOD`
    - `3'b100` when `out_display_clock` is set to `1'b1`
 3. The working memory `character_ram` that implements a dual-port RAM of 2048 bytes. The screen uses only 1280 bytes.  
    The read port is used by the system and it's directly linked to the font ROM by this rule: `character = RAM[(coord_x/8)+(40*(coord_y/8))]`.
