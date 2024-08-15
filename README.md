@@ -16,6 +16,7 @@ Extra details are present in the other files from the doc folder.
 ## FPGA
 
 The project is created around the [MACHXO2](https://www.latticesemi.com/en/Products/FPGAandCPLD/MachXO2) series.  
+It will fit the `LCMXO2-640` devices when the font ROM is implemented as a distributed memory.   
 
 The screen is split into 8*8 pixel blocks that create a 40 column by 32 rows character only display.  
 The design can use a normal video RAM but that will require `320*256/8=10240` bytes of RAM - not available on the chosen device.  
@@ -33,8 +34,7 @@ There are several functional blocks used by the design:
    - `3'b100` when `out_display_clock` is set to `1'b1`
 3. The working memory `character_ram` that implements a dual-port RAM of 2048 bytes. The screen uses only 1280 bytes.  
    The read port is used by the system and it's directly linked to the font ROM by this rule: `character = RAM[(coord_x/8)+(40*(coord_y/8))]`.
-4. The font ROM `font_rom` that implements a 2048 bytes ROM. It stores 256 characters in an 8x8 matrix.
+4. The font ROM `font_rom` that implements a 1024 bytes ROM. It stores 127 characters (0x00-0x7F) in an 8x8 matrix.
    The pixel data is generatig by `fontRomAddr = (8*character)+coord_y[2:0]` and `out_display_data = ROM[fontRomAddr][coord_x[2:0]]`
-   This can be reduced to 1024 bytes, to implement only the first 127 characters.
 
 
