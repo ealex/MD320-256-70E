@@ -81,13 +81,14 @@ character_ram character_ram_inst (
 
 
 // the font ROM requires 256*8 bytes - each font is 8x8
-wire[10:0] fontRomAddr = (8*character)+coord_y[2:0];
+// it's storing only the first 127 characters => 1024 bytes
+wire[9:0] fontRomAddr = (8*character)+coord_y[2:0];
 wire[7:0] font_rom_data;
 font_rom font_rom_inst (
 	.Address(fontRomAddr),
-	.OutClock(main_clock),
-	.OutClockEn(1'b1),
-	.Reset(1'b0),
+	//.OutClock(main_clock),
+	//.OutClockEn(1'b1),
+	//.Reset(1'b0),
 	.Q(font_rom_data)
 );
 assign out_display_data = font_rom_data[coord_x[2:0]];

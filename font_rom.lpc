@@ -11,13 +11,13 @@ Status=S
 VendorName=Lattice Semiconductor Corporation
 CoreType=LPM
 CoreStatus=Demo
-CoreName=ROM
-CoreRevision=5.4
+CoreName=Distributed_ROM
+CoreRevision=2.8
 ModuleName=font_rom
 SourceFormat=Verilog HDL
 ParameterFileVersion=1.0
-Date=08/14/2024
-Time=11:09:21
+Date=08/15/2024
+Time=09:26:21
 
 [Parameters]
 Verilog=1
@@ -27,26 +27,14 @@ Destination=Synplicity
 Expression=BusA(0 to 7)
 Order=Big Endian [MSB:LSB]
 IO=0
-Address=2048
+Addresses=1024
 Data=8
-enByte=0
-ByteSize=9
-OutputEn=0
-ClockEn=0
-Optimization=Speed
-Reset=Sync
-Reset1=Sync
-Init=0
-MemFile=d:/fpga_work/md320.256-70e/font_rom.mem
+LUT=0
+MemFile=d:/fpga_work/md320-256-70e/font_rom.mem
 MemFormat=hex
-EnECC=0
-Pipeline=0
-Write=Normal
-init_data=0
-no_init=0
 
 [FilesGenerated]
-d:/fpga_work/md320.256-70e/font_rom.mem=mem
+d:/fpga_work/md320-256-70e/font_rom.mem=mem
 
 [Command]
-cmd_line= -w -n font_rom -lang verilog -synth lse -bus_exp 7 -bb -arch xo2c00 -type romblk -device LCMXO2-7000HE -addr_width 11 -data_width 8 -num_words 2048 -cascade -1 -memfile "d:/fpga_work/md320.256-70e/font_rom.mem" -memformat hex
+cmd_line= -w -n font_rom -lang verilog -synth lse -bus_exp 7 -bb -arch xo2c00 -dram -type romblk -addr_width 10 -num_words 1024 -data_width 8 -outdata UNREGISTERED -memfile d:/fpga_work/md320-256-70e/font_rom.mem -memformat hex

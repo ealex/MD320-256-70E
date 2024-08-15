@@ -1,5 +1,5 @@
 SCUBA, Version Diamond (64-bit) 3.12.1.454
-Wed Aug 14 11:09:21 2024
+Thu Aug 15 09:26:21 2024
 
 Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
 Copyright (c) 1995 AT&T Corp.   All rights reserved.
@@ -7,15 +7,16 @@ Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
 Copyright (c) 2001 Agere Systems   All rights reserved.
 Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
 
-    Issued command   : D:\fpgaTools\latticeDiamond\diamond\3.12\ispfpga\bin\nt64\scuba.exe -w -n font_rom -lang verilog -synth lse -bus_exp 7 -bb -arch xo2c00 -type romblk -device LCMXO2-7000HE -addr_width 11 -data_width 8 -num_words 2048 -cascade -1 -memfile d:/fpga_work/md320.256-70e/font_rom.mem -memformat hex 
+    Issued command   : D:\fpgaTools\latticeDiamond\diamond\3.12\ispfpga\bin\nt64\scuba.exe -w -n font_rom -lang verilog -synth lse -bus_exp 7 -bb -arch xo2c00 -dram -type romblk -addr_width 10 -num_words 1024 -data_width 8 -outdata UNREGISTERED -memfile d:/fpga_work/md320-256-70e/font_rom.mem -memformat hex 
     Circuit name     : font_rom
-    Module type      : EBR_ROM
-    Module Version   : 5.4
+    Module type      : rom
+    Module Version   : 2.8
+    Address width    : 10
     Ports            : 
-	Inputs       : Address[10:0], OutClock, OutClockEn, Reset
+	Inputs       : Address[9:0]
 	Outputs      : Q[7:0]
     I/O buffer       : not inserted
-    Memory file      : d:/fpga_work/md320.256-70e/font_rom.mem
+    Memory file      : d:/fpga_work/md320-256-70e/font_rom.mem
     EDIF output      : font_rom.edn
     Verilog output   : font_rom.v
     Verilog template : font_rom_tmpl.v
@@ -24,6 +25,7 @@ Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
     Bus notation     : big endian
     Report output    : font_rom.srp
     Element Usage    :
-          DP8KC : 2
+          MUX41 : 8
+      ROM256X1A : 32
     Estimated Resource Usage:
-            EBR : 2
+            LUT : 264
