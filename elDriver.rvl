@@ -1,10 +1,10 @@
-<Project ModBy="Inserter" SigType="0" Name="C:/Users/rotten/Desktop/work/lattice/machXO2/EL_display_320x256/elDriver.rvl" Date="2023-11-21">
+<Project ModBy="Inserter" SigType="0" Name="D:/fpga_work/MD320-256-70E/elDriver.rvl" Date="2024-08-16">
     <IP Version="1_6_042617"/>
-    <Design DesignEntry="Schematic/Verilog HDL" Synthesis="lse" DeviceFamily="MachXO2" DesignName="EL_display_320x256"/>
-    <Core InsertDataset="0" Insert="1" Reveal_sig="518737586" Name="elDriver_LA0" ID="0">
+    <Design DesignEntry="Schematic/Verilog HDL" Synthesis="lse" DeviceFamily="MachXO2" DesignName="MD320-256-70E"/>
+    <Core InsertDataset="0" Insert="1" Reveal_sig="572584025" Name="elDriver_LA0" ID="0">
         <Setting>
             <Clock SampleClk="main_clock" SampleEnable="0" EnableClk="" EnableClk_Pri="0"/>
-            <TraceBuffer Implementation="0" BitTimeStamp="0" hasTimeStamp="0" IncTrigSig="0" BufferDepth="128"/>
+            <TraceBuffer Implementation="0" BitTimeStamp="0" hasTimeStamp="0" IncTrigSig="0" BufferDepth="256"/>
             <Capture Mode="1" MinSamplesPerTrig="8"/>
             <Event CntEnable="0" MaxEventCnt="8"/>
             <TrigOut Polarity="0" MinPulseWidth="0" TrigOutNetType="1" EnableTrigOut="0" TrigOutNet="reveal_debug_elDriver_LA0_net"/>
@@ -12,80 +12,58 @@
         </Setting>
         <Dataset Name="Base">
             <Trace>
-                <Bus Name="character_ram_index">
-                    <Sig Type="SIG" Name="character_ram_index:0"/>
-                    <Sig Type="SIG" Name="character_ram_index:1"/>
-                    <Sig Type="SIG" Name="character_ram_index:2"/>
-                    <Sig Type="SIG" Name="character_ram_index:3"/>
-                    <Sig Type="SIG" Name="character_ram_index:4"/>
-                    <Sig Type="SIG" Name="character_ram_index:5"/>
-                    <Sig Type="SIG" Name="character_ram_index:6"/>
-                    <Sig Type="SIG" Name="character_ram_index:7"/>
-                    <Sig Type="SIG" Name="character_ram_index:8"/>
-                    <Sig Type="SIG" Name="character_ram_index:9"/>
-                    <Sig Type="SIG" Name="character_ram_index:10"/>
+                <Bus Name="ramWriteData">
+                    <Sig Type="SIG" Name="ramWriteData:0"/>
+                    <Sig Type="SIG" Name="ramWriteData:1"/>
+                    <Sig Type="SIG" Name="ramWriteData:2"/>
+                    <Sig Type="SIG" Name="ramWriteData:3"/>
+                    <Sig Type="SIG" Name="ramWriteData:4"/>
+                    <Sig Type="SIG" Name="ramWriteData:5"/>
+                    <Sig Type="SIG" Name="ramWriteData:6"/>
+                    <Sig Type="SIG" Name="ramWriteData:7"/>
                 </Bus>
-                <Bus Name="character">
-                    <Sig Type="SIG" Name="character:0"/>
-                    <Sig Type="SIG" Name="character:1"/>
-                    <Sig Type="SIG" Name="character:2"/>
-                    <Sig Type="SIG" Name="character:3"/>
-                    <Sig Type="SIG" Name="character:4"/>
-                    <Sig Type="SIG" Name="character:5"/>
-                    <Sig Type="SIG" Name="character:6"/>
-                    <Sig Type="SIG" Name="character:7"/>
+                <Bus Name="ramWriteStateMachine">
+                    <Sig Type="SIG" Name="ramWriteStateMachine:0"/>
+                    <Sig Type="SIG" Name="ramWriteStateMachine:1"/>
+                    <Sig Type="SIG" Name="ramWriteStateMachine:2"/>
+                    <Sig Type="SIG" Name="ramWriteStateMachine:3"/>
+                    <Sig Type="SIG" Name="ramWriteStateMachine:4"/>
+                    <Sig Type="SIG" Name="ramWriteStateMachine:5"/>
+                    <Sig Type="SIG" Name="ramWriteStateMachine:6"/>
+                    <Sig Type="SIG" Name="ramWriteStateMachine:7"/>
                 </Bus>
-                <Bus Name="fontRomAddr">
-                    <Sig Type="SIG" Name="fontRomAddr:0"/>
-                    <Sig Type="SIG" Name="fontRomAddr:1"/>
-                    <Sig Type="SIG" Name="fontRomAddr:2"/>
-                    <Sig Type="SIG" Name="fontRomAddr:3"/>
-                    <Sig Type="SIG" Name="fontRomAddr:4"/>
-                    <Sig Type="SIG" Name="fontRomAddr:5"/>
-                    <Sig Type="SIG" Name="fontRomAddr:6"/>
-                    <Sig Type="SIG" Name="fontRomAddr:7"/>
-                    <Sig Type="SIG" Name="fontRomAddr:8"/>
-                    <Sig Type="SIG" Name="fontRomAddr:9"/>
-                    <Sig Type="SIG" Name="fontRomAddr:10"/>
+                <Bus Name="ramWriteAddress">
+                    <Sig Type="SIG" Name="ramWriteAddress:0"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:1"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:2"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:3"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:4"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:5"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:6"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:7"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:8"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:9"/>
+                    <Sig Type="SIG" Name="ramWriteAddress:10"/>
                 </Bus>
-                <Bus Name="font_rom_data">
-                    <Sig Type="SIG" Name="font_rom_data:0"/>
-                    <Sig Type="SIG" Name="font_rom_data:1"/>
-                    <Sig Type="SIG" Name="font_rom_data:2"/>
-                    <Sig Type="SIG" Name="font_rom_data:3"/>
-                    <Sig Type="SIG" Name="font_rom_data:4"/>
-                    <Sig Type="SIG" Name="font_rom_data:5"/>
-                    <Sig Type="SIG" Name="font_rom_data:6"/>
-                    <Sig Type="SIG" Name="font_rom_data:7"/>
+                <Bus Name="oldRamColumn">
+                    <Sig Type="SIG" Name="oldRamColumn:0"/>
+                    <Sig Type="SIG" Name="oldRamColumn:1"/>
+                    <Sig Type="SIG" Name="oldRamColumn:2"/>
+                    <Sig Type="SIG" Name="oldRamColumn:3"/>
+                    <Sig Type="SIG" Name="oldRamColumn:4"/>
+                    <Sig Type="SIG" Name="oldRamColumn:5"/>
                 </Bus>
-                <Bus Name="coord_x">
-                    <Sig Type="SIG" Name="coord_x:0"/>
-                    <Sig Type="SIG" Name="coord_x:1"/>
-                    <Sig Type="SIG" Name="coord_x:2"/>
-                    <Sig Type="SIG" Name="coord_x:3"/>
-                    <Sig Type="SIG" Name="coord_x:4"/>
-                    <Sig Type="SIG" Name="coord_x:5"/>
-                    <Sig Type="SIG" Name="coord_x:6"/>
-                    <Sig Type="SIG" Name="coord_x:7"/>
-                    <Sig Type="SIG" Name="coord_x:8"/>
+                <Bus Name="oldRamRow">
+                    <Sig Type="SIG" Name="oldRamRow:0"/>
+                    <Sig Type="SIG" Name="oldRamRow:1"/>
+                    <Sig Type="SIG" Name="oldRamRow:2"/>
+                    <Sig Type="SIG" Name="oldRamRow:3"/>
+                    <Sig Type="SIG" Name="oldRamRow:4"/>
+                    <Sig Type="SIG" Name="oldRamRow:5"/>
                 </Bus>
-                <Bus Name="coord_y">
-                    <Sig Type="SIG" Name="coord_y:0"/>
-                    <Sig Type="SIG" Name="coord_y:1"/>
-                    <Sig Type="SIG" Name="coord_y:2"/>
-                    <Sig Type="SIG" Name="coord_y:3"/>
-                    <Sig Type="SIG" Name="coord_y:4"/>
-                    <Sig Type="SIG" Name="coord_y:5"/>
-                    <Sig Type="SIG" Name="coord_y:6"/>
-                    <Sig Type="SIG" Name="coord_y:7"/>
-                    <Sig Type="SIG" Name="coord_y:8"/>
-                </Bus>
-                <Sig Type="SIG" Name="out_display_data"/>
-                <Sig Type="SIG" Name="out_display_clock"/>
             </Trace>
             <Trigger>
-                <TU Serialbits="0" Type="0" ID="1" Sig="(BUS)el_320x256_sync_inst/display_x_cnt[8:0],"/>
-                <TU Serialbits="0" Type="0" ID="2" Sig="(BUS)el_320x256_sync_inst/display_y_cnt[8:0],"/>
+                <TU Serialbits="0" Type="0" ID="1" Sig="(BUS)oldRamRow[5:0],"/>
                 <TE MaxSequence="1" MaxEvnCnt="1" ID="1" Resource="1"/>
             </Trigger>
         </Dataset>
