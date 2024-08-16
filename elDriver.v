@@ -67,17 +67,20 @@ assign out_display_data = (coord_x == 10'd0) | (coord_x== 10'd319)
 // this will allow a maximum of 1280 characters on the screen
 wire[10:0] character_ram_index = (coord_x/8)+(40*(coord_y/8));
 wire[7:0] character;
+reg[7:0] ramWriteData;
+reg[10:0] ramWriteAddress;
+reg ramWriteEnable;
 //localparam	character = 8'h21;
 character_ram character_ram_inst (
-	.WrAddress(11'd0),
+	.WrAddress(ramWriteAddress),
 	.RdAddress(character_ram_index),
-	.Data(8'd0),
-	.WE(1'b0), 
+	.Data(ramWriteData),
+	.WE(ramWriteEnable), 
     .RdClock(main_clock),
 	.RdClockEn(1'b1),
 	.Reset(1'b0),
 	.WrClock(main_clock),
-	.WrClockEn(1'b0), 
+	.WrClockEn(1'b1), 
     .Q(character)
 );
 
@@ -108,8 +111,84 @@ uart_rx #(.CLKS_PER_BIT(UART_CLK_DIV)) UART_RX_INST (
 	.i_Clock(main_clock),
 	.i_Rx_Serial(UART_RX),
 	.o_Rx_DV(uartNewByte),
-	.o_Rx_Byte()
+	.o_Rx_Byte(uartRxData)
 );
+
+/**
+	this is the state machine that controlls memory writes
+	ramWriteData - stores the data that will be pushes to the  character RAM
+	ramWriteAddress - current write address, set to 0 on reset then kept as it's current value
+						it's incremented on normal writes, or set to a specific value on "addr set" commands
+	ramWriteEnable - strobed once the operation is known
+	oldRamColumn - stores the last updated column
+	oldRamRow - stores the last updated row
+	
+	Commands: 
+		0x00-0x7F - writes that character at the current ramWriteAddress and increments ramWriteAddress 
+		0b10xxxxxx - updates oldRamColumn and recalculates ramWriteAddress
+		0b11xxxxxx - updates oldRamRow and recalculates ramWriteAddress
+*/
+reg[5:0] oldRamColumn;
+reg[5:0] oldRamRow;
+reg[2:0] ramWriteStateMachine;
+always @ (posedge main_clock) begin
+	case (ramWriteStateMachine)
+		3'd0: begin // this is the reset state
+			ramWriteData <= 8'd0;
+			ramWriteEnable <= 1'b0;
+			ramWriteAddress <= 11'd0;
+			oldRamColumn <= 8'd0;
+			oldRamRow <= 8'd0;
+			ramWriteStateMachine <= 3'd1;
+		end
+		3'd1: begin // wait for a new byte
+			if(1'b1==uartNewByte) begin
+				ramWriteData <= uartRxData;
+				ramWriteEnable <= 1'b0;
+				ramWriteAddress <= ramWriteAddress;
+				ramWriteStateMachine <= 3'd2;
+			end else begin
+				// keep waiting for a new byte
+				ramWriteData <= 8'd0;
+				ramWriteEnable <= 1'b0;
+				ramWriteAddress <= ramWriteAddress;
+				ramWriteStateMachine <= 3'd1;
+			end
+		end
+		3'd2: begin // got a new byte, process it
+			if(1'b0==ramWriteData[7]) begin
+				// 0x00 - 0x7F are normal characters
+				// strobe the write enable signal
+				ramWriteEnable <= 1'b1;
+				ramWriteStateMachine <= 3'd4;
+			end else begin
+				if(1'b0 == ramWriteData[6] ) begin
+					//1'b10xxxxxx - update column
+					oldRamColumn <= ramWriteData[5:0];
+					ramWriteStateMachine <= 3'd3;
+				end else begin
+					//1'b11xxxxxx - update row
+					oldRamRow <= ramWriteData[5:0];
+					ramWriteStateMachine <= 3'd3;
+				end
+			end
+		end
+		3'd3: begin
+			// recalculate ramWriteAddress and restart the machine
+			ramWriteAddress <= oldRamRow*40+oldRamColumn;
+			ramWriteStateMachine <= 3'd1;
+		end
+		3'd4: begin
+			// clear the write enable, increment the current write address and wait for a new character
+			ramWriteEnable <= 1'b0;
+			ramWriteAddress <= ramWriteAddress + 11'd1;
+			ramWriteStateMachine <= 3'd1;
+		end
+		default: begin
+			ramWriteStateMachine <= 3'd0;
+		end
+	endcase
+end
 
 // debug signals
 assign debug_out_display_clock = out_display_clock;

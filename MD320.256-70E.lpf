@@ -27,3 +27,5 @@ LOCATE COMP "debug_out_display_data" SITE "38" ;
 LOCATE COMP "debug_out_display_hs" SITE "42" ;
 LOCATE COMP "debug_out_display_vs" SITE "43" ;
 VOLTAGE 1.140 V;
+LOCATE COMP "UART_RX" SITE "73" ;
+IOBUF PORT "UART_RX" IO_TYPE=LVCMOS33 PULLMODE=UP HYSTERESIS=LARGE ;

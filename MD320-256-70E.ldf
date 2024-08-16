@@ -15,6 +15,9 @@
         <Source name="sync.v" type="Verilog" type_short="Verilog">
             <Options/>
         </Source>
+        <Source name="uart/uart_rx.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
         <Source name="character_ram.mem" type="Unknown Type" type_short="Unknown">
             <Options/>
         </Source>
