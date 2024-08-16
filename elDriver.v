@@ -130,62 +130,131 @@ uart_rx #(.CLKS_PER_BIT(UART_CLK_DIV)) UART_RX_INST (
 */
 reg[5:0] oldRamColumn;
 reg[5:0] oldRamRow;
-reg[2:0] ramWriteStateMachine;
+reg[7:0] ramWriteStateMachine = 8'd0;
 always @ (posedge main_clock) begin
 	case (ramWriteStateMachine)
-		3'd0: begin // this is the reset state
+		8'b00000000: begin // this is the reset state
 			ramWriteData <= 8'd0;
 			ramWriteEnable <= 1'b0;
 			ramWriteAddress <= 11'd0;
 			oldRamColumn <= 8'd0;
 			oldRamRow <= 8'd0;
-			ramWriteStateMachine <= 3'd1;
+			ramWriteStateMachine <= 8'b00000001;
 		end
-		3'd1: begin // wait for a new byte
+		8'b00000001: begin // wait for a new byte
 			if(1'b1==uartNewByte) begin
 				ramWriteData <= uartRxData;
 				ramWriteEnable <= 1'b0;
 				ramWriteAddress <= ramWriteAddress;
-				ramWriteStateMachine <= 3'd2;
+				ramWriteStateMachine <= 8'b00000010;
 			end else begin
 				// keep waiting for a new byte
-				ramWriteData <= 8'd0;
-				ramWriteEnable <= 1'b0;
-				ramWriteAddress <= ramWriteAddress;
-				ramWriteStateMachine <= 3'd1;
+				ramWriteStateMachine <= 8'b00000001;
 			end
 		end
-		3'd2: begin // got a new byte, process it
-			if(1'b0==ramWriteData[7]) begin
-				// 0x00 - 0x7F are normal characters
-				// strobe the write enable signal
-				ramWriteEnable <= 1'b1;
-				ramWriteStateMachine <= 3'd4;
-			end else begin
-				if(1'b0 == ramWriteData[6] ) begin
-					//1'b10xxxxxx - update column
-					oldRamColumn <= ramWriteData[5:0];
-					ramWriteStateMachine <= 3'd3;
-				end else begin
-					//1'b11xxxxxx - update row
-					oldRamRow <= ramWriteData[5:0];
-					ramWriteStateMachine <= 3'd3;
+		8'b00000010: begin // got a new byte, process it
+			casez (ramWriteData)
+				8'b00001010: begin //Line feed - increment ROW
+					oldRamRow <= oldRamRow + 6'd1;
+					oldRamColumn <= 6'd0;
+					ramWriteStateMachine <= 8'b10000000;
 				end
-			end
+				8'b00001101: begin	// CR - ignored
+					ramWriteStateMachine <= 8'b00000001;
+				end
+				8'b11111111: begin	// memory clear
+					ramWriteStateMachine <= 8'b11100000;
+				end
+				8'b10??????: begin	// update COLUMN
+					oldRamColumn <= ramWriteData[5:0];
+					ramWriteStateMachine <= 8'b10000000;
+				end
+				8'b11??????: begin	// update ROW
+					oldRamRow <= ramWriteData[5:0];
+					ramWriteStateMachine <= 8'b10000000;
+				end
+				default: begin		// all other characters are treated as printable
+					// trigger the write strobe
+					ramWriteEnable <= 1'b1;
+					ramWriteStateMachine <= 8'b11000000;
+				end
+			endcase
 		end
-		3'd3: begin
+		
+// codes that start with 0b1000xxxx handle ramWriteAddress recalculation
+		8'b10000000: begin	// one check to ensure we're in screen
+			if(6'd39 < oldRamColumn) oldRamColumn <= 6'd0;
+			if(6'd31 < oldRamRow) oldRamRow <= 6'd0;
+			ramWriteStateMachine <= 8'b10000001;
+		end
+		8'b10000001: begin
 			// recalculate ramWriteAddress and restart the machine
-			ramWriteAddress <= oldRamRow*40+oldRamColumn;
-			ramWriteStateMachine <= 3'd1;
+			ramWriteAddress <= oldRamColumn + oldRamRow*40;
+			ramWriteStateMachine <= 8'b00000001;
 		end
-		3'd4: begin
+
+
+
+
+
+
+// codes that start with 0b1100xxxx are used to write a byte to video ram
+		8'b11000000: begin
 			// clear the write enable, increment the current write address and wait for a new character
 			ramWriteEnable <= 1'b0;
-			ramWriteAddress <= ramWriteAddress + 11'd1;
-			ramWriteStateMachine <= 3'd1;
+			// keep track of the row and columnn
+			oldRamColumn <= oldRamColumn + 1'd1;
+			ramWriteStateMachine <= 8'b11000001;
 		end
+		8'b11000001: begin
+			if(6'd39 < oldRamColumn) begin
+				oldRamColumn <= 6'd0;
+				oldRamRow <= oldRamRow + 6'd1;
+			end
+			ramWriteStateMachine <= 8'b11000010;
+		end
+		8'b11000010: begin
+			if(6'd31 < oldRamRow) begin		// reset to TOP screen when running past the end
+				oldRamRow <= 6'd0;
+			end
+			ramWriteStateMachine <= 8'b11000011;
+		end
+		8'b11000011: begin
+			ramWriteAddress <= oldRamColumn + oldRamRow*40;
+			ramWriteStateMachine <= 8'b00000001;
+		end
+		
+
+// codes that start with 0b1110xxxx are used to erase the memory
+		8'b11100000: begin // reset the memory pointer, and row and col
+			ramWriteAddress <= 11'd0;
+			oldRamRow <= 6'd0;
+			oldRamColumn <= 6'd0;
+			ramWriteData <= 8'd0;
+			ramWriteStateMachine <= 8'b11100001;
+		end
+		8'b11100001: begin	// loop for 
+			if( 11'd1281 == ramWriteAddress ) begin		// reached the end of the memory
+				ramWriteAddress <= 11'd0;
+				ramWriteStateMachine <= 8'b00000001;
+			end else begin
+				ramWriteEnable <= 1'b1;
+				ramWriteStateMachine <= 8'b11100010;
+			end
+		end
+		8'b11100010: begin
+			ramWriteEnable <= 1'b0;
+			ramWriteStateMachine <= 8'b11100011;
+		end
+		8'b11100011: begin
+			ramWriteAddress <= ramWriteAddress + 11'd1;
+			ramWriteStateMachine <= 8'b11100001;
+		end
+
+
+// final handler
 		default: begin
-			ramWriteStateMachine <= 3'd0;
+			ramWriteStateMachine <= 8'b00000000;
 		end
 	endcase
 end
